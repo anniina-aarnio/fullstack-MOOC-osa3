@@ -14,6 +14,7 @@ app.use(
       "-",
       tokens["response-time"](req, res),
       "ms",
+      JSON.stringify(req.body),
     ].join(" ");
   })
 );
@@ -78,7 +79,6 @@ app.delete("/api/persons/:id", (req, res) => {
 app.post("/api/persons", (req, res) => {
   //const maxId = persons.length > 0 ? Math.max(...persons.map((n) => n.id)) : 0;
   const body = req.body;
-  console.log(body);
 
   // if no content
   if (!body.name) {
@@ -99,7 +99,6 @@ app.post("/api/persons", (req, res) => {
     });
   }
 
-  console.log("miksi olen täällä?");
   const person = {
     id: Math.floor(Math.random() * 10000),
     name: body.name,
