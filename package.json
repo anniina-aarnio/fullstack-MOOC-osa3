@@ -1,0 +1,12 @@
+{
+  "name": "puhelinluettelo",
+  "version": "0.0.1",
+  "description": "Part 3 of fullstack MOOC of the University of Helsinki",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Anniina Aarnio",
+  "license": "MIT"
+}
