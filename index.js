@@ -4,7 +4,19 @@ const app = express();
 
 // 1. middleware
 app.use(express.json());
-app.use(morgan("tiny"));
+app.use(
+  morgan(function (tokens, req, res) {
+    return [
+      tokens.method(req, res),
+      tokens.url(req, res),
+      tokens.status(req, res),
+      tokens.res(req, res, "content-length"),
+      "-",
+      tokens["response-time"](req, res),
+      "ms",
+    ].join(" ");
+  })
+);
 
 let persons = [
   {
@@ -87,9 +99,11 @@ app.post("/api/persons", (req, res) => {
     });
   }
 
+  console.log("miksi olen täällä?");
   const person = {
     id: Math.floor(Math.random() * 10000),
-    content: body.content,
+    name: body.name,
+    number: body.number,
   };
 
   persons = persons.concat(person);
