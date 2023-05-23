@@ -4,7 +4,20 @@ const app = express();
 
 // 1. middleware
 app.use(express.json());
-app.use(morgan("tiny"));
+app.use(
+  morgan(function (tokens, req, res) {
+    return [
+      tokens.method(req, res),
+      tokens.url(req, res),
+      tokens.status(req, res),
+      tokens.res(req, res, "content-length"),
+      "-",
+      tokens["response-time"](req, res),
+      "ms",
+      JSON.stringify(req.body),
+    ].join(" ");
+  })
+);
 
 let persons = [
   {
@@ -66,7 +79,6 @@ app.delete("/api/persons/:id", (req, res) => {
 app.post("/api/persons", (req, res) => {
   //const maxId = persons.length > 0 ? Math.max(...persons.map((n) => n.id)) : 0;
   const body = req.body;
-  console.log(body);
 
   // if no content
   if (!body.name) {
@@ -89,7 +101,8 @@ app.post("/api/persons", (req, res) => {
 
   const person = {
     id: Math.floor(Math.random() * 10000),
-    content: body.content,
+    name: body.name,
+    number: body.number,
   };
 
   persons = persons.concat(person);
