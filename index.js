@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 
+// 1. middleware
 app.use(express.json());
 
 let persons = [
@@ -26,20 +27,19 @@ let persons = [
   },
 ];
 
-app.get("/", (req, res) => {
-  res.send("<h1>Hello World!</h1>");
-});
-
+// get info-page
 app.get("/info", (req, res) => {
   res.send(
     `<p>Phonebook has info for ${persons.length} people</p><p>${new Date()}</p>`
   );
 });
 
+// get all persons
 app.get("/api/persons", (req, res) => {
   res.json(persons);
 });
 
+// get person by id
 app.get("/api/persons/:id", (req, res) => {
   const id = Number(req.params.id);
   const person = persons.find((person) => {
@@ -52,6 +52,7 @@ app.get("/api/persons/:id", (req, res) => {
   }
 });
 
+// delete person
 app.delete("/api/persons/:id", (req, res) => {
   const id = Number(req.params.id);
   persons = persons.filter((person) => person.id !== id);
@@ -59,6 +60,7 @@ app.delete("/api/persons/:id", (req, res) => {
   res.status(204).end();
 });
 
+// add person
 app.post("/api/persons", (req, res) => {
   //const maxId = persons.length > 0 ? Math.max(...persons.map((n) => n.id)) : 0;
   const body = req.body;
