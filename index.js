@@ -60,11 +60,12 @@ app.delete("/api/persons/:id", (req, res) => {
 });
 
 app.post("/api/persons", (req, res) => {
-  const maxId = persons.length > 0 ? Math.max(...persons.map((n) => n.id)) : 0;
-  console.log(maxId);
+  //const maxId = persons.length > 0 ? Math.max(...persons.map((n) => n.id)) : 0;
+  const newID = Math.floor(Math.random() * 10000);
+  console.log(newID);
   const person = req.body;
   console.log(person);
-  person.id = maxId + 1;
+  person.id = newID + 1;
   persons = persons.concat(person);
   res.json(person);
 });
