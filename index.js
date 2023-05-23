@@ -61,11 +61,33 @@ app.delete("/api/persons/:id", (req, res) => {
 
 app.post("/api/persons", (req, res) => {
   //const maxId = persons.length > 0 ? Math.max(...persons.map((n) => n.id)) : 0;
-  const newID = Math.floor(Math.random() * 10000);
-  console.log(newID);
-  const person = req.body;
-  console.log(person);
-  person.id = newID + 1;
+  const body = req.body;
+  console.log(body);
+
+  // if no content
+  if (!body.name) {
+    return res.status(400).json({
+      error: "name missing",
+    });
+  }
+
+  if (!body.number) {
+    return res.status(400).json({
+      error: "number missing",
+    });
+  }
+
+  if (persons.find((person) => person.name === body.name)) {
+    return res.status(400).json({
+      error: "name already on phonebook",
+    });
+  }
+
+  const person = {
+    id: Math.floor(Math.random() * 10000),
+    content: body.content,
+  };
+
   persons = persons.concat(person);
   res.json(person);
 });
