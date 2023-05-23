@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 
-let users = [
+let persons = [
   {
     id: 1,
     name: "Arto Hellas",
@@ -28,8 +28,8 @@ app.get("/", (req, res) => {
   res.send("<h1>Hello World!</h1>");
 });
 
-app.get("/api/users", (req, res) => {
-  res.json(users);
+app.get("/api/persons", (req, res) => {
+  res.json(persons);
 });
 
 const PORT = 3001;
