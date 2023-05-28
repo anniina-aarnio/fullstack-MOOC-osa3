@@ -46,13 +46,12 @@ app.get("/api/persons/:id", (req, res) => {
       if (person) {
         res.json(person);
       } else {
-        console.log("didn't find => else block");
         res.status(404).end();
       }
     })
     .catch((error) => {
       console.log(error);
-      res.status(500).end();
+      res.status(400).send({ error: "malformatted id" });
     });
 });
 
