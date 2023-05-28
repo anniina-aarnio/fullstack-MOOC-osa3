@@ -1,36 +1,8 @@
+require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
-const mongoose = require("mongoose");
-
-// mongoDB stuff
-if (process.argv.length < 3) {
-  console.log("give arguments: mongo.js password");
-  process.exit(1);
-}
-
-let password = process.argv[2];
-
-const url = `mongodb+srv://fullstackMOOC:${password}@clusterio.devcpgq.mongodb.net/phoneApp?retryWrites=true&w=majority`;
-
-mongoose.set("strictQuery", false);
-mongoose.connect(url);
-
-const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
-});
-
-personSchema.set("toJSON", {
-  transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString();
-    delete returnedObject._id;
-    delete returnedObject.__v;
-  },
-});
-
-const Person = mongoose.model("Person", personSchema);
-// mongoDB stuff ends
+const Person = require("./models/person");
 
 const app = express();
 
@@ -92,15 +64,9 @@ app.get("/api/persons", (req, res) => {
 
 // get person by id
 app.get("/api/persons/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const person = persons.find((person) => {
-    return person.id === id;
-  });
-  if (person) {
+  Person.findById(req.params.id).then((person) => {
     res.json(person);
-  } else {
-    res.status(204).end();
-  }
+  });
 });
 
 // delete person
@@ -135,15 +101,15 @@ app.post("/api/persons", (req, res) => {
     });
   }
 
-  const person = {
-    id: Math.floor(Math.random() * 10000),
+  const person = new Person({
     name: body.name,
     number: body.number,
-  };
+  });
 
-  persons = persons.concat(person);
-  res.json(person);
+  person.save().then((savedPerson) => {
+    res.json(savedPerson);
+  });
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
