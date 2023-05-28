@@ -25,29 +25,6 @@ app.use(
   })
 );
 
-let persons = [
-  {
-    id: 1,
-    name: "Arto Hellas",
-    number: "040-123456",
-  },
-  {
-    id: 2,
-    name: "Ada Lovelace",
-    number: "39-44-5323523",
-  },
-  {
-    id: 3,
-    name: "Dan Abramov",
-    number: "12-43-234345",
-  },
-  {
-    id: 4,
-    name: "Mary Poppendick",
-    number: "39-23-6423122",
-  },
-];
-
 // get info-page
 app.get("/info", (req, res) => {
   res.send(
@@ -95,11 +72,11 @@ app.post("/api/persons", (req, res) => {
     });
   }
 
-  if (persons.find((person) => person.name === body.name)) {
+  /*   if (persons.find((person) => person.name === body.name)) {
     return res.status(400).json({
       error: "name already on phonebook",
     });
-  }
+  } */
 
   const person = new Person({
     name: body.name,
