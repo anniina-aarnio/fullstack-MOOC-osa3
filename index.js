@@ -41,9 +41,19 @@ app.get("/api/persons", (req, res) => {
 
 // get person by id
 app.get("/api/persons/:id", (req, res) => {
-  Person.findById(req.params.id).then((person) => {
-    res.json(person);
-  });
+  Person.findById(req.params.id)
+    .then((person) => {
+      if (person) {
+        res.json(person);
+      } else {
+        console.log("didn't find => else block");
+        res.status(404).end();
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).end();
+    });
 });
 
 // delete person
