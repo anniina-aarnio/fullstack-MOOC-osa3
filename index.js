@@ -1,9 +1,13 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 const app = express();
 
+app.use(cors());
 // 1. middleware
 app.use(express.json());
+
+//app.use(express.static("build"));
 app.use(
   morgan(function (tokens, req, res) {
     return [
