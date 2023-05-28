@@ -16,3 +16,4 @@ https://phonebook-0ls1.onrender.com
 ## Ohjelman käyttö
 
 Ohjelman voi ajaa komennolla `npm start` tai developer-modessa `npm run dev`, jolloin hyödyntää myös nodemonia.
+Linttauksen voi suorittaa komennolla `npm run lint`.
