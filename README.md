@@ -2,7 +2,8 @@
 
 Part 3 of fullstack MOOC of the University of Helsinki
 
-Tehtävät 3.1.-3.18.
+Tehtävät 3.1.-3.18.:
+
 https://fullstackopen.com/osa3/node_js_ja_express#tehtavat-3-1-3-6
 https://fullstackopen.com/osa3/sovellus_internetiin#tehtavat-3-9-3-11
 https://fullstackopen.com/osa3/tietojen_tallettaminen_mongo_db_tietokantaan#tehtava-3-12
