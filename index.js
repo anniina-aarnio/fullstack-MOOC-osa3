@@ -1,6 +1,37 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
+const mongoose = require("mongoose");
+
+// mongoDB stuff
+if (process.argv.length < 3) {
+  console.log("give arguments: mongo.js password");
+  process.exit(1);
+}
+
+let password = process.argv[2];
+
+const url = `mongodb+srv://fullstackMOOC:${password}@clusterio.devcpgq.mongodb.net/phoneApp?retryWrites=true&w=majority`;
+
+mongoose.set("strictQuery", false);
+mongoose.connect(url);
+
+const personSchema = new mongoose.Schema({
+  name: String,
+  number: String,
+});
+
+personSchema.set("toJSON", {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString();
+    delete returnedObject._id;
+    delete returnedObject.__v;
+  },
+});
+
+const Person = mongoose.model("Person", personSchema);
+// mongoDB stuff ends
+
 const app = express();
 
 // middlewares
@@ -54,7 +85,9 @@ app.get("/info", (req, res) => {
 
 // get all persons
 app.get("/api/persons", (req, res) => {
-  res.json(persons);
+  Person.find({}).then((persons) => {
+    res.json(persons);
+  });
 });
 
 // get person by id
