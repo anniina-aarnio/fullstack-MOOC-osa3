@@ -5,3 +5,13 @@ Content-Type: application/json
     "name": "Testi Tyyppi",
     "number": "123-557-244"
 }
+
+###
+
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+    "name": "Kissa Koira",
+    "number": "4958049583049850"
+}
