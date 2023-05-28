@@ -12,6 +12,8 @@ const errorHandler = (error, req, res, next) => {
   if (error.name === "CastError") {
     return res.status(400).send({ error: "malformatted id" });
   }
+
+  next(error);
 };
 
 const unknownEndpoint = (req, res) => {
@@ -20,7 +22,6 @@ const unknownEndpoint = (req, res) => {
 
 // middlewares
 app.use(cors());
-app.use(express.static("build"));
 app.use(express.json());
 app.use(
   morgan(function (tokens, req, res) {
@@ -36,6 +37,7 @@ app.use(
     ].join(" ");
   })
 );
+app.use(express.static("build"));
 
 // get info-page
 app.get("/info", (req, res) => {
@@ -61,18 +63,6 @@ app.get("/api/persons/:id", (req, res) => {
         res.status(404).end();
       }
     })
-    .catch((error) => {
-      console.log(error);
-      res.status(400).send({ error: "malformatted id" });
-    });
-});
-
-// delete person
-app.delete("/api/persons/:id", (req, res) => {
-  Person.findByIdAndRemove(req.params.id)
-    .then((result) => {
-      res.status(204).end();
-    })
     .catch((error) => next(error));
 });
 
@@ -94,12 +84,6 @@ app.post("/api/persons", (req, res) => {
     });
   }
 
-  /*   if (persons.find((person) => person.name === body.name)) {
-    return res.status(400).json({
-      error: "name already on phonebook",
-    });
-  } */
-
   const person = new Person({
     name: body.name,
     number: body.number,
@@ -108,6 +92,36 @@ app.post("/api/persons", (req, res) => {
   person.save().then((savedPerson) => {
     res.json(savedPerson);
   });
+});
+
+// delete person
+app.delete("/api/persons/:id", (req, res) => {
+  Person.findByIdAndRemove(req.params.id)
+    .then((result) => {
+      res.status(204).end();
+    })
+    .catch((error) => next(error));
+});
+
+app.put("/api/persons/:id", (req, res, next) => {
+  const body = req.body;
+
+  const person = {
+    name: body.name,
+    number: body.number,
+  };
+
+  // nyt päivittää uuden numeron, vaikka numero olisi tyhjä
+
+  Person.findByIdAndUpdate(req.params.id, person, { new: true })
+    .then((updatedPerson) => {
+      console.log("updated person:", updatedPerson);
+      res.json(updatedPerson);
+    })
+    .catch((error) => {
+      console.log("kissa", error);
+      next(error);
+    });
 });
 
 app.use(unknownEndpoint);
